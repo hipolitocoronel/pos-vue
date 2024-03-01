@@ -8,7 +8,7 @@
   </p>
 
   <div class="flex justify-end mt-6">
-    <Button @click="dialog = true">producto {{ dialog }}</Button>
+    <Button @click="dialog = true"> <Plus class="w-4 mr-2" />Agregar </Button>
     <FormProduct @data-refetched="refetch" />
   </div>
 
@@ -28,13 +28,13 @@ import DataTable from "@/components/layout/DataTable.vue";
 import TableAction from "@/components/products/TableAction.vue";
 import FormProduct from "@/components/products/FormProduct.vue";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-vue-next";
+import { Loader2, Plus } from "lucide-vue-next";
 
-import { h } from "vue";
+import { h, onMounted } from "vue";
 import { formatMoney } from "@/utils";
 import { useProduct } from "../composables/product";
 
-const { dialog, isFetching, products, error, refetch } = useProduct();
+const { dialog, isFetching, products, error, getAll } = useProduct();
 
 const columns = [
   {

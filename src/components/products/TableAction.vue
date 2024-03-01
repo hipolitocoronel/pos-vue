@@ -4,7 +4,7 @@
     :isOpen="open"
     description="Ésta acción no se puede deshacer."
     @close-alert="open = false"
-    :action="removeProduct"
+    :action="() => removeProduct(product?.id)"
   />
 
   <DropdownMenu>
@@ -40,23 +40,12 @@ import AlertDialog from "@/components/layout/AlertDialog.vue";
 import { MoreHorizontal, Trash, PenLine } from "lucide-vue-next";
 
 import { ref, defineEmits } from "vue";
-import { pb } from "@/services/apiPocketbase";
-import { toast } from "vue-sonner";
+import { useProduct } from "../../composables/product";
 
 const { product } = defineProps(["product"]);
+
+const { removeProduct } = useProduct();
 const emit = defineEmits(["data-refetched"]);
 
 const open = ref(false);
-
-const removeProduct = () => {
-  pb.collection("products")
-    .delete(product.id)
-    .then(() => {
-      toast.success("Operación exitosa", {
-        description: "Producto eliminado exitosamente",
-      });
-
-      emit("data-refetched");
-    });
-};
 </script>
