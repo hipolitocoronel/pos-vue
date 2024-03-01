@@ -34,7 +34,7 @@ import { h, onMounted } from "vue";
 import { formatMoney } from "@/utils";
 import { useProduct } from "../composables/product";
 
-const { dialog, isFetching, products, error, getAll } = useProduct();
+const { dialog, isFetching, products, error, refetch } = useProduct();
 
 const columns = [
   {
