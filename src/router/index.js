@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Sales from "../views/Sales.vue";
 import Products from "../views/Products.vue";
 import Users from "../views/Users.vue";
+import OneUser from "../views/OneUser.vue";
 
 const routes = [
   {
@@ -22,8 +23,14 @@ const routes = [
   },
   {
     path: "/users",
-    name: "Users",
-    component: Users,
+    children: [
+      { path: "", name: "users.index", component: Users },
+      {
+        path: "create",
+        name: "users.create",
+        component: OneUser,
+      },
+    ],
   },
   {
     path: "/config",

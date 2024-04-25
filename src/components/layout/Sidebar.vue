@@ -1,6 +1,6 @@
 <template>
   <div class="w-64 border-r">
-    <nav class="flex flex-col gap-2 px-3 pt-12">
+    <nav class="flex flex-col h-full gap-2 px-3 pt-12">
       <SidebarItem
         v-for="item in menuItems"
         :key="item.to"
@@ -8,6 +8,10 @@
         :label="item.label"
       >
         <component :is="item.icon" class="w-4 h-4 mr-2" />
+      </SidebarItem>
+      <div class="grow"></div>
+      <SidebarItem to="/" label="Cerrar sesión" class="mb-3 border">
+        <LogOut class="w-4 h-4 mr-2" />
       </SidebarItem>
     </nav>
   </div>
@@ -21,6 +25,7 @@ import {
   Package,
   User,
   Settings,
+  LogOut,
 } from "lucide-vue-next";
 
 // array de elementos del menú
