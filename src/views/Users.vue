@@ -25,16 +25,38 @@
   <div v-else>
     <DataTable :columns="store.columns" :data="store.users" />
   </div>
+
+  <AlertDialog
+    title="¿Estás seguro?"
+    :isOpen="alertDelete"
+    description="Ésta acción no se puede deshacer."
+    @close-alert="alertDelete = false"
+    :action="() => store.deleteUser(route.params.id)"
+  />
 </template>
 
 <script setup>
 import { Loader2, Plus } from "lucide-vue-next";
 import Button from "../components/ui/button/Button.vue";
 import DataTable from "@/components/layout/DataTable.vue";
+import AlertDialog from "../components/layout/AlertDialog.vue";
 
-import { onMounted } from "vue";
+import { onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "../store/user";
+
+const route = useRoute();
+const router = useRouter();
 const store = useUserStore();
+const alertDelete = ref(false);
 
 onMounted(() => store.getUsers());
+
+watch(route, () => {
+  alertDelete.value = false;
+  const id = route?.params.id || "";
+  if (route.name === "users.delete" && id.length > 4) {
+    alertDelete.value = true;
+  }
+});
 </script>

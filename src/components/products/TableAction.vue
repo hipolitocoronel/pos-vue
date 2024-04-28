@@ -1,10 +1,10 @@
 <template>
   <!-- <AlertDialog
     title="¿Estás seguro?"
-    :isOpen="open"
+    :isOpen="dialog"
     description="Ésta acción no se puede deshacer."
-    @close-alert="open = false"
-    :action="() => removeProduct(product?.id)"
+    @close-alert="dialog = false"
+    :action="actionDelete"
   /> -->
 
   <DropdownMenu>
@@ -16,19 +16,19 @@
     <DropdownMenuContent>
       <DropdownMenuLabel>Acciones </DropdownMenuLabel>
       <DropdownMenuItem as-child class="cursor-pointer">
-        <router-link :to="`${domain}/show/${id}`">
+        <router-link :to="`/${domain}/show/${id}`">
           <Eye class="w-4 h-4 mr-2" />
           Ver más
         </router-link>
       </DropdownMenuItem>
       <DropdownMenuItem as-child class="cursor-pointer">
-        <router-link :to="`${domain}/update/${id}`">
+        <router-link :to="`/${domain}/update/${id}`">
           <PenLine class="w-4 h-4 mr-2" />
           Editar
         </router-link>
       </DropdownMenuItem>
       <DropdownMenuItem as-child class="cursor-pointer">
-        <router-link :to="`${domain}/delete`">
+        <router-link :to="`/${domain}/delete/${id}`">
           <Trash class="w-4 h-4 mr-2" />
           Eliminar
         </router-link>
@@ -51,6 +51,11 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Trash, PenLine, Eye } from "lucide-vue-next";
 
 import { ref } from "vue";
+// const dialog = ref(false);
 
-const { id, domain } = defineProps(["id", "domain"]);
+const { id, domain, actionDelete } = defineProps([
+  "id",
+  "domain",
+  "actionDelete",
+]);
 </script>

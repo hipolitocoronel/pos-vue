@@ -35,6 +35,11 @@ const routes = [
         name: "users.update",
         component: OneUser,
       },
+      {
+        path: "delete/:id",
+        name: "users.delete",
+        component: Users,
+      },
     ],
   },
   {

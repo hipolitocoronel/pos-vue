@@ -1,5 +1,9 @@
 import { formatMoney } from "@/utils";
 import TableAction from "../../components/products/TableAction.vue";
+import { useUserStore } from "../../store/user";
+
+// const store = useUserStore();
+
 import { h } from "vue";
 
 const columns = [
@@ -28,7 +32,8 @@ const columns = [
     header: "Acciones",
     cell: ({ row }) => {
       const { id } = row.original;
-      return h("div", h(TableAction, { id, domain: "users" }));
+      const actionDelete = () => store.deleteUser(id);
+      return h("div", h(TableAction, { id, domain: "users", actionDelete }));
     },
   },
 ];

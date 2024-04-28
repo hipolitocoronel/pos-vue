@@ -3,8 +3,11 @@ import { defineStore } from "pinia";
 import { pb } from "../services/apiPocketbase";
 import { toast } from "vue-sonner";
 import columns from "../utils/columns/user";
+import { useRouter } from "vue-router";
 
 export const useUserStore = defineStore("users", () => {
+  const router = useRouter();
+
   // Genera un número aleatorio entre 1 y 100000000
   let min = 1;
   let max = 100000000;
@@ -82,6 +85,22 @@ export const useUserStore = defineStore("users", () => {
     }
   };
 
+  const deleteUser = async (id) => {
+    try {
+      loading.value = true;
+      await api.delete(id);
+      toast.success("Usuario elimin1ado con éxito");
+      loading.value = false;
+
+      // redirección vista usuarios
+      router.replace("/users");
+    } catch (error) {
+      router.replace("/users");
+      toast.error("Error al eliminar usuario, inténtelo más tarde!");
+      loading.value = false;
+    }
+  };
+
   return {
     // properties
     loading,
@@ -94,5 +113,6 @@ export const useUserStore = defineStore("users", () => {
     getOneUser,
     createUser,
     updateUser,
+    deleteUser,
   };
 });

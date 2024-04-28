@@ -147,6 +147,7 @@ import { Loader2 } from "lucide-vue-next";
 
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, reactive, ref } from "vue";
+import AlertDialog from "../components/layout/AlertDialog.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -160,9 +161,8 @@ const page = reactive({
   butonText: "",
 });
 
-const changePassword = ref(false);
-
 const store = useUserStore();
+const changePassword = ref(false);
 
 onMounted(() => {
   switch (route.name) {
