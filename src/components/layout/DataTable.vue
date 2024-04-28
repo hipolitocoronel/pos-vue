@@ -33,7 +33,7 @@
         <template v-else>
           <TableRow>
             <TableCell :colSpan="columns.length" class="h-24 text-center">
-              No results.
+              Sin datos.
             </TableCell>
           </TableRow>
         </template>

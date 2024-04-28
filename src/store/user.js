@@ -14,6 +14,8 @@ export const useUserStore = defineStore("users", () => {
 
   const loading = ref(false);
   const users = ref([]);
+
+  // para creacion/ edicion
   const user = ref({
     username: `test_username_${randomInRange}`,
     email: `test_${randomInRange}@example.com`,
@@ -23,7 +25,7 @@ export const useUserStore = defineStore("users", () => {
     name: "test",
     phone: "test",
     adress: "test adress",
-  }); // para creacion/ edicion
+  });
 
   const getUsers = async () => {
     try {
@@ -39,10 +41,23 @@ export const useUserStore = defineStore("users", () => {
     }
   };
 
+  const getOneUser = async (id) => {
+    try {
+      loading.value = true;
+      const result = await api.getOne(id);
+
+      loading.value = false;
+      user.value = result;
+    } catch (error) {
+      toast.error("Error al obtener usuario, inténtelo más tarde!");
+      loading.value = false;
+    }
+  };
+
   const createUser = async () => {
     try {
       loading.value = true;
-      const result = await api.create(user.value);
+      await api.create(user.value);
       setTimeout(() => {
         loading.value = false;
         toast.success("Usuario creado con éxito");
@@ -52,18 +67,32 @@ export const useUserStore = defineStore("users", () => {
       loading.value = false;
     }
   };
-  const editUser = () => {};
+
+  const updateUser = async (id) => {
+    try {
+      loading.value = true;
+      await api.update(id, user.value);
+      setTimeout(() => {
+        loading.value = false;
+        toast.success("Usuario editado con éxito");
+      }, 500);
+    } catch (error) {
+      toast.error("Error al editar usuario, inténtelo más tarde!");
+      loading.value = false;
+    }
+  };
 
   return {
     // properties
-    loading: loading,
+    loading,
     columns,
     user,
     users: users,
 
     // methods
     getUsers,
+    getOneUser,
     createUser,
-    editUser,
+    updateUser,
   };
 });

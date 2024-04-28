@@ -15,17 +15,23 @@
     </DropdownMenuTrigger>
     <DropdownMenuContent>
       <DropdownMenuLabel>Acciones </DropdownMenuLabel>
-      <DropdownMenuItem class="cursor-pointer">
-        <Eye class="w-4 h-4 mr-2" />
-        Ver más
+      <DropdownMenuItem as-child class="cursor-pointer">
+        <router-link :to="`${domain}/show/${id}`">
+          <Eye class="w-4 h-4 mr-2" />
+          Ver más
+        </router-link>
       </DropdownMenuItem>
-      <DropdownMenuItem class="cursor-pointer">
-        <PenLine class="w-4 h-4 mr-2" />
-        Editar
+      <DropdownMenuItem as-child class="cursor-pointer">
+        <router-link :to="`${domain}/update/${id}`">
+          <PenLine class="w-4 h-4 mr-2" />
+          Editar
+        </router-link>
       </DropdownMenuItem>
-      <DropdownMenuItem class="cursor-pointer" @click="open = true">
-        <Trash class="w-4 h-4 mr-2" />
-        Eliminar
+      <DropdownMenuItem as-child class="cursor-pointer">
+        <router-link :to="`${domain}/delete`">
+          <Trash class="w-4 h-4 mr-2" />
+          Eliminar
+        </router-link>
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
@@ -44,9 +50,7 @@ import { Button } from "@/components/ui/button";
 // import AlertDialog from "@/components/layout/AlertDialog.vue";
 import { MoreHorizontal, Trash, PenLine, Eye } from "lucide-vue-next";
 
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 
-const { product } = defineProps(["product"]);
-
-const open = ref(false);
+const { id, domain } = defineProps(["id", "domain"]);
 </script>

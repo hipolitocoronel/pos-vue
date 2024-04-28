@@ -27,8 +27,8 @@ const columns = [
     accessorKey: "actions",
     header: "Acciones",
     cell: ({ row }) => {
-      const product = row.original;
-      return h("div", h(TableAction, { product }));
+      const { id } = row.original;
+      return h("div", h(TableAction, { id, domain: "users" }));
     },
   },
 ];

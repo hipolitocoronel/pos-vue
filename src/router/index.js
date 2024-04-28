@@ -30,6 +30,11 @@ const routes = [
         name: "users.create",
         component: OneUser,
       },
+      {
+        path: "update/:id",
+        name: "users.update",
+        component: OneUser,
+      },
     ],
   },
   {

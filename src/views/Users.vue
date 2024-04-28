@@ -2,7 +2,7 @@
   <h1 class="text-2xl font-bold">
     Usuarios
 
-    <span class="text-xl font-normal">({{ store.users?.length || 0 }})</span>
+    <span class="text-base font-light">({{ store.users?.length || 0 }})</span>
   </h1>
 
   <p class="text-sm text-muted-foreground">
