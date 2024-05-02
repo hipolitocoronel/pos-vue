@@ -10,7 +10,7 @@
         <component :is="item.icon" class="w-4 h-4 mr-2" />
       </SidebarItem>
       <div class="grow"></div>
-      <SidebarItem to="/" label="Cerrar sesión" class="mb-3 border">
+      <SidebarItem to="/login" label="Cerrar sesión" class="mb-3 border">
         <LogOut class="w-4 h-4 mr-2" />
       </SidebarItem>
     </nav>
@@ -31,7 +31,7 @@ import {
 // array de elementos del menú
 const menuItems = [
   { to: "/sales", label: "Ventas", icon: ShoppingBag },
-  { to: "/", label: "Inventario", icon: GitCompareArrows },
+  { to: "/inventory", label: "Inventario", icon: GitCompareArrows },
   { to: "/products", label: "Productos", icon: Package },
   { to: "/users", label: "Usuarios", icon: User },
   { to: "/config", label: "Configuraciones", icon: Settings },

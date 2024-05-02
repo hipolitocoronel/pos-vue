@@ -20,14 +20,13 @@ export const useUserStore = defineStore("users", () => {
 
   // para creacion/ edicion
   const user = ref({
-    username: `test_username_${randomInRange}`,
     email: `test_${randomInRange}@example.com`,
     emailVisibility: true,
     password: "12345678",
     passwordConfirm: "12345678",
     name: "test",
     phone: "test",
-    adress: "test adress",
+    address: "test adress",
   });
 
   const getUsers = async () => {
@@ -94,6 +93,7 @@ export const useUserStore = defineStore("users", () => {
 
       // redirección vista usuarios
       router.replace("/users");
+      await getUsers();
     } catch (error) {
       router.replace("/users");
       toast.error("Error al eliminar usuario, inténtelo más tarde!");

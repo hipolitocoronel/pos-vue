@@ -4,8 +4,17 @@ import Sales from "../views/Sales.vue";
 import Products from "../views/Products.vue";
 import Users from "../views/Users.vue";
 import OneUser from "../views/OneUser.vue";
+import Inventory from "../views/Inventory.vue";
+import Login from "../views/Login.vue";
+import { pb } from "../services/apiPocketbase";
+import { toast } from "vue-sonner";
 
 const routes = [
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
+  },
   {
     path: "/",
     name: "Home",
@@ -15,6 +24,11 @@ const routes = [
     path: "/sales",
     name: "Sales",
     component: Sales,
+  },
+  {
+    path: "/inventory",
+    name: "inventory",
+    component: Inventory,
   },
   {
     path: "/products",
@@ -52,6 +66,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = pb.authStore.isValid;
+
+  if (to.name !== "login" && !isAuthenticated) {
+    next({ name: "login" });
+    toast.error("Sesión expirada, favor de iniciar sesión!");
+  } else next();
 });
 
 export default router;

@@ -20,7 +20,7 @@ const columns = [
     header: "Telefono",
   },
   {
-    accessorKey: "adress",
+    accessorKey: "address",
     header: "Dirección",
     cell: ({ row }) => {
       const { adress } = row.original;

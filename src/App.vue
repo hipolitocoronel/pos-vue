@@ -8,9 +8,9 @@
     <!-- <Login /> -->
 
     <div class="flex flex-col h-screen">
-      <Nav />
+      <Nav v-if="route.name !== 'login'" />
       <div class="flex grow items-strech">
-        <Sidebar />
+        <Sidebar v-if="route.name !== 'login'" />
         <main class="px-6 py-6 grow">
           <router-view></router-view>
         </main>
@@ -25,4 +25,7 @@ import Sidebar from "./components/layout/Sidebar.vue";
 import { Button } from "./components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import Login from "./views/Login.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 </script>

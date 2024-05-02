@@ -21,7 +21,7 @@
   <main v-auto-animate>
     <Loader2
       class="my-3 animate-spin"
-      v-if="store.loading && !store?.user?.username"
+      v-if="store.loading && !store?.user?.email"
     />
     <section class="grid gap-8 mt-8 max-w-7xl lg:grid-cols-2" v-else>
       <div class="grid w-full items-center gap-1.5">
@@ -57,7 +57,7 @@
           id="email"
           type="email"
           placeholder="Ingrese su dirección"
-          v-model="store.user.adress"
+          v-model="store.user.address"
         />
       </div>
 
@@ -147,7 +147,6 @@ import { Loader2 } from "lucide-vue-next";
 
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, reactive, ref } from "vue";
-import AlertDialog from "../components/layout/AlertDialog.vue";
 
 const route = useRoute();
 const router = useRouter();

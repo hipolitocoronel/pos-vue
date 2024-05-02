@@ -1,27 +1,53 @@
 <template>
-  <div class="h-screen flex">
-    <div class="w-1/2 flex items-center justify-end">
-      <canvas
-        ref="el"
-        width="1200"
-        height="1200"
-        style="width: 700px; height: 700px"
-      ></canvas>
-    </div>
-    <div class="w-1/2 flex items-center justify-center">
-      <form class="ma-5 w-[380px]" @submit="onSubmit">
-        <p class="text-3xl font-bold mb-3">Bienvenidos</p>
-        <FormField v-slot="{ componentField }" name="username">
-          <FormItem>
-            <FormLabel>Username</FormLabel>
-            <FormControl>
-              <Input placeholder="shadcn" v-bind="componentField" />
-            </FormControl>
-            <FormDescription />
-            <FormMessage />
-          </FormItem>
-        </FormField>
-        <Button type="submit" class="w-full"> Ingresar </Button>
+  <div class="flex h-screen">
+    <div class="flex items-center justify-center grow">
+      <form class="ma-5 w-[430px]" @submit.prevent="store.login()">
+        <p class="mb-3 text-3xl font-bold">Bienvenidos</p>
+        <div v-auto-animate>
+          <Label>Correo electrónico</Label>
+          <Input
+            placeholder="Ingrese su correo electrónico"
+            v-model="store.email"
+          />
+          <Label class="text-xs text-red-500" v-if="store.errors['email']">
+            {{ store.errors["email"] }}
+          </Label>
+        </div>
+
+        <div class="mt-5" v-auto-animate>
+          <Label>Contraseña</Label>
+          <div class="relative">
+            <Input
+              placeholder="* * * * * * * *"
+              v-model="store.password"
+              :type="passwordType"
+            ></Input>
+            <Button
+              class="absolute top-0 right-0 rounded-full"
+              variant="ghost"
+              size="icon"
+              type="button"
+              @click="togglePassword()"
+            >
+              <Eye v-if="passwordType == 'password'" class="w-5" />
+              <EyeOff v-else class="w-5" />
+            </Button>
+          </div>
+          <Label class="text-xs text-red-500" v-if="store.errors['password']">
+            {{ store.errors["password"] }}
+          </Label>
+        </div>
+        <router-link
+          to="/"
+          variant="link"
+          class="mt-2 text-xs text-muted-foreground"
+        >
+          Olvidaste tu contraseña?
+        </router-link>
+        <Button class="w-full mt-10 font-bold" type="submit">
+          <Loader2 class="w-4 h-4 mr-2 animate-spin" v-if="store.loading" />
+          Iniciar sesión
+        </Button>
       </form>
     </div>
   </div>
@@ -30,63 +56,17 @@
 <script setup>
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Label } from "../components/ui/label";
 
-import { useForm } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
-import createGlobe from "cobe";
-import * as z from "zod";
-import { ref, onMounted } from "vue";
+import { useStore } from "../store/store";
+import { Eye, EyeOff, Loader2 } from "lucide-vue-next";
+import { ref } from "vue";
 
-const el = ref();
-const phi = ref(0);
-onMounted(() => {
-  createGlobe(el.value, {
-    devicePixelRatio: 2,
-    width: 1200,
-    height: 1200,
-    phi: 0,
-    theta: 0,
-    dark: 1,
-    diffuse: 1.2,
-    mapSamples: 16000,
-    mapBrightness: 6,
-    baseColor: [0.3, 0.3, 0.3],
-    markerColor: [0.1, 0.8, 1],
-    glowColor: [1, 1, 1],
-    offset: [0, 0],
-    markers: [
-      // longitude latitude
-      { location: [37.7595, -122.4367], size: 0.03 },
-      { location: [40.7128, -74.006], size: 0.1 },
-    ],
-    onRender: (state) => {
-      // Called on every animation frame.
-      // `state` will be an empty object, return updated params.
-      state.phi = phi.value;
-      phi.value += 0.01;
-    },
-  });
-});
+const store = useStore();
 
-const formSchema = toTypedSchema(
-  z.object({
-    username: z.string().min(2).max(50),
-  })
-);
+const passwordType = ref("password");
 
-const form = useForm({
-  validationSchema: formSchema,
-});
-
-const onSubmit = form.handleSubmit((values) => {
-  console.log("Form submitted!", values);
-});
+const togglePassword = () => {
+  passwordType.value = passwordType.value == "password" ? "text" : "password";
+};
 </script>

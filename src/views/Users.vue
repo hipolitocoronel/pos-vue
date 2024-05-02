@@ -30,7 +30,12 @@
     title="¿Estás seguro?"
     :isOpen="alertDelete"
     description="Ésta acción no se puede deshacer."
-    @close-alert="alertDelete = false"
+    @close-alert="
+      () => {
+        router.replace('/users');
+        alertDelete = false;
+      }
+    "
     :action="() => store.deleteUser(route.params.id)"
   />
 </template>

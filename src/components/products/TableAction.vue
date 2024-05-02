@@ -1,12 +1,4 @@
 <template>
-  <!-- <AlertDialog
-    title="¿Estás seguro?"
-    :isOpen="dialog"
-    description="Ésta acción no se puede deshacer."
-    @close-alert="dialog = false"
-    :action="actionDelete"
-  /> -->
-
   <DropdownMenu>
     <DropdownMenuTrigger>
       <Button size="icon" variant="ghost" class="p-0 w-7 h-7">

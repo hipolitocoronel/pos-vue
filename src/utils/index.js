@@ -1,3 +1,5 @@
+import { pb } from "../services/apiPocketbase";
+
 export const formatMoney = (amount) => {
   // Se utiliza el objeto Intl.NumberFormat para formatear el número
   const formatter = new Intl.NumberFormat("es-AR", {
