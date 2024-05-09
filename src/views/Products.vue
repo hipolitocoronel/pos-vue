@@ -21,7 +21,7 @@
       <Button variant="secondary">Categoria</Button>
     </div>
     <Button as-child>
-      <router-link to="/users/create">
+      <router-link to="/products/create">
         <Plus class="w-4 mr-2" />
         Agregar
       </router-link>

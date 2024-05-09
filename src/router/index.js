@@ -4,6 +4,7 @@ import Sales from "../views/Sales.vue";
 import Products from "../views/Products.vue";
 import Users from "../views/Users.vue";
 import OneUser from "../views/OneUser.vue";
+import OneProduct from "../views/OneProduct.vue";
 import Inventory from "../views/Inventory.vue";
 import Login from "../views/Login.vue";
 import { pb } from "../services/apiPocketbase";
@@ -37,17 +38,17 @@ const routes = [
       {
         path: "create",
         name: "products.create",
-        component: OneUser,
+        component: OneProduct,
       },
       {
         path: "update/:id",
         name: "products.update",
-        component: OneUser,
+        component: OneProduct,
       },
       {
         path: "delete/:id",
         name: "products.delete",
-        component: Users,
+        component: Products,
       },
     ],
   },

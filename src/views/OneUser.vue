@@ -1,18 +1,4 @@
 <template>
-  <Breadcrumb>
-    <BreadcrumbList>
-      <BreadcrumbItem>
-        <BreadcrumbLink>
-          <router-link to="/users">Usuarios</router-link>
-        </BreadcrumbLink>
-      </BreadcrumbItem>
-      <BreadcrumbSeparator />
-      <BreadcrumbItem>
-        <BreadcrumbPage>{{ page.title }}</BreadcrumbPage>
-      </BreadcrumbItem>
-    </BreadcrumbList>
-  </Breadcrumb>
-
   <div class="pt-4 pb-6 border-b">
     <h1 class="mb-1 text-2xl font-bold">{{ page.title }}</h1>
     <p class="text-sm text-muted-foreground">{{ page.descripcion }}</p>
@@ -128,15 +114,6 @@
 </template>
 
 <script setup>
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-
 import Input from "../components/ui/input/Input.vue";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
