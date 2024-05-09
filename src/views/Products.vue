@@ -1,65 +1,78 @@
 <template>
-  <h2 class="text-2xl font-bold">
+  <h1 class="text-2xl font-bold">
     Productos
-    <span class="text-xl font-normal">({{ products?.length || 0 }})</span>
-  </h2>
+
+    <span class="text-base font-light"
+      >({{ store.products?.length || 0 }})</span
+    >
+  </h1>
+
   <p class="text-sm text-muted-foreground">
     Desde ésta seccion vas a poder realizar la gestión de todos tus productos.
   </p>
 
-  <div class="flex justify-end mt-6">
-    <Button @click="dialog = true"> <Plus class="w-4 mr-2" />Agregar </Button>
-    <FormProduct @data-refetched="refetch" />
+  <div class="flex justify-between mt-6">
+    <div class="flex gap-3 grow">
+      <Input
+        placeholder="Buscar por descripción"
+        variant="secondary"
+        class="max-w-md"
+      />
+      <Button variant="secondary">Categoria</Button>
+    </div>
+    <Button as-child>
+      <router-link to="/users/create">
+        <Plus class="w-4 mr-2" />
+        Agregar
+      </router-link>
+    </Button>
   </div>
 
-  <div v-if="isFetching">
-    <Loader2 class="animate-spin" />
-  </div>
+  <DataTable
+    :columns="store.columns"
+    :data="store.products"
+    :loading="store.loading"
+    :pagination="store.pagination"
+    :action="store.getProducts"
+  />
 
-  <div v-else-if="error" class="text-danger">Error al obtener productos</div>
-
-  <div v-else>
-    <DataTable :columns="columns" :data="products" />
-  </div>
+  <AlertDialog
+    title="¿Estás seguro?"
+    :isOpen="alertDelete"
+    description="Ésta acción no se puede deshacer."
+    @close-alert="
+      () => {
+        router.replace('/users');
+        alertDelete = false;
+      }
+    "
+    :action="() => store.deleteUser(route.params.id)"
+  />
 </template>
 
 <script setup>
-import DataTable from "@/components/layout/DataTable.vue";
-import TableAction from "@/components/products/TableAction.vue";
-import FormProduct from "@/components/products/FormProduct.vue";
-import { Button } from "@/components/ui/button";
 import { Loader2, Plus } from "lucide-vue-next";
+import Button from "../components/ui/button/Button.vue";
+import DataTable from "@/components/layout/DataTable.vue";
+import AlertDialog from "../components/layout/AlertDialog.vue";
+import { Input } from "../components/ui/input";
 
-import { h, onMounted } from "vue";
-import { formatMoney } from "@/utils";
-import { useProduct } from "../composables/product";
+import { onMounted, onUnmounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useProductStore } from "../store/product";
 
-const { dialog, isFetching, products, error, refetch } = useProduct();
+const route = useRoute();
+const router = useRouter();
+const store = useProductStore();
+const alertDelete = ref(false);
 
-const columns = [
-  {
-    accessorKey: "name",
-    header: "Nombre",
-  },
-  {
-    accessorKey: "price",
-    header: "Precio",
-    cell: ({ row }) => formatMoney(row.getValue("price")),
-  },
-  {
-    accessorKey: "stock",
-    header: "Stock",
-  },
-  {
-    accessorKey: "actions",
-    header: "",
-    cell: ({ row }) => {
-      const product = row.original;
-      return h(
-        "div",
-        h(TableAction, { product, onDataRefetched: () => refetch() })
-      );
-    },
-  },
-];
+onMounted(() => store.getProducts());
+
+watch(route, () => {
+  alertDelete.value = false;
+  const id = route?.params.id || "";
+  if (route.name === "users.delete" && id.length > 4) {
+    alertDelete.value = true;
+  }
+});
 </script>

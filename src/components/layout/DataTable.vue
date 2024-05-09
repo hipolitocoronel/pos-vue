@@ -1,6 +1,6 @@
 <template>
-  <ScrollArea class="rounded-md border h-[calc(100vh-250px)] mt-3">
-    <Table class="relative">
+  <ScrollArea class="rounded-md border h-[calc(100vh-260px)] mt-3">
+    <Table class="relative" v-if="!loading">
       <TableHeader>
         <TableRow
           v-for="headerGroup in table.getHeaderGroups()"
@@ -39,7 +39,15 @@
         </template>
       </TableBody>
     </Table>
+    <div
+      class="absolute top-0 flex items-center justify-center w-full h-full bg-neutral-950/70"
+      v-else
+    >
+      <Loader2 class="w-7 h-7 animate-spin" />
+    </div>
   </ScrollArea>
+
+  <DataTablePagination :table="table" />
 </template>
 
 <script setup>
@@ -55,6 +63,9 @@ import {
 } from "@/components/ui/table";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import DataTablePagination from "./DataTablePagination.vue";
+import { computed, reactive, defineEmits, toRefs } from "vue";
+import { Loader2 } from "lucide-vue-next";
 
 const props = defineProps({
   columns: {
@@ -65,11 +76,42 @@ const props = defineProps({
     type: Array,
     default: [],
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+
+  action: {
+    type: Function,
+  },
+  pagination: {
+    type: Object,
+    default: { perPage: 10, page: 1 },
+  },
 });
 
-const table = useVueTable({
-  data: props.data,
-  columns: props.columns,
-  getCoreRowModel: getCoreRowModel(),
+const pagination = reactive({
+  pageSize: props?.pagination?.perPage,
+  pageIndex: props?.pagination?.page - 1,
 });
+
+const table = computed(() =>
+  useVueTable({
+    data: props.data,
+    columns: props.columns,
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    onPaginationChange: onPaginationChange,
+    state: { pagination },
+    pageCount: props.pagination.totalPages,
+  })
+);
+
+const onPaginationChange = (updater) => {
+  const { pageIndex: page, pageSize: perPage } = updater(pagination);
+
+  pagination.pageIndex = page;
+  pagination.pageSize = perPage;
+  props.action();
+};
 </script>

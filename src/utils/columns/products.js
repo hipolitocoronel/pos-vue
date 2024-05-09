@@ -1,30 +1,27 @@
 import { formatMoney } from "@/utils";
 
-
 const columns = [
   {
-    accessorKey: "name",
-    header: "Nombre",
+    accessorKey: "description",
+    header: "Descripción",
   },
   {
-    accessorKey: "price",
-    header: "Precio",
-    cell: ({ row }) => formatMoney(row.getValue("price")),
+    accessorKey: "salePrice",
+    header: "Precio de venta",
+    cell: ({ row }) => formatMoney(row.getValue("salePrice")),
   },
   {
     accessorKey: "stock",
     header: "Stock",
   },
   {
+    accessorKey: "category",
+    header: "Categoria",
+    cell: ({ row }) => "-",
+  },
+  {
     accessorKey: "actions",
     header: "",
-    cell: ({ row }) => {
-      const product = row.original;
-      return h(
-        "div",
-        h(TableAction, { product, onDataRefetched: () => refetch() })
-      );
-    },
   },
 ];
 

@@ -32,8 +32,24 @@ const routes = [
   },
   {
     path: "/products",
-    name: "Products",
-    component: Products,
+    children: [
+      { path: "", name: "products.index", component: Products },
+      {
+        path: "create",
+        name: "products.create",
+        component: OneUser,
+      },
+      {
+        path: "update/:id",
+        name: "products.update",
+        component: OneUser,
+      },
+      {
+        path: "delete/:id",
+        name: "products.delete",
+        component: Users,
+      },
+    ],
   },
   {
     path: "/users",
