@@ -18,8 +18,8 @@ export const useProductStore = defineStore("products", () => {
     description: "test",
     stock: 123,
     minStock: 123,
-    salePrice: 123,
     purchasePrice: 123,
+    salePrice: 123,
   });
 
   const pagination = ref({

@@ -47,7 +47,7 @@
     </div>
   </ScrollArea>
 
-  <DataTablePagination :table="table" />
+  <DataTablePagination :table="table" v-if="manualPagination" />
 </template>
 
 <script setup>
@@ -88,6 +88,10 @@ const props = defineProps({
     type: Object,
     default: { perPage: 10, page: 1 },
   },
+  manualPagination: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const pagination = reactive({
@@ -100,7 +104,7 @@ const table = computed(() =>
     data: props.data,
     columns: props.columns,
     getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
+    manualPagination: props.manualPagination,
     onPaginationChange: onPaginationChange,
     state: { pagination },
     pageCount: props.pagination.totalPages,

@@ -1,4 +1,5 @@
 <template>
+  <HeaderPage title="Usuarios" :functionality="page.title" to="/users" />
   <div class="pt-4 pb-6 border-b">
     <h1 class="mb-1 text-2xl font-bold">{{ page.title }}</h1>
     <p class="text-sm text-muted-foreground">{{ page.descripcion }}</p>
@@ -124,6 +125,7 @@ import { Loader2 } from "lucide-vue-next";
 
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, reactive, ref } from "vue";
+import HeaderPage from "../components/layout/HeaderPage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -144,7 +146,7 @@ onMounted(() => {
   switch (route.name) {
     case "users.create":
       page.title = "Crear usuario";
-      page.descripcion = "Edición de un usuario existente";
+      page.descripcion = "Creación un nuevo usuario";
       page.isCreating = true;
       page.action = store.createUser;
 
@@ -152,15 +154,15 @@ onMounted(() => {
       break;
     case "users.update":
       const id = route.params.id;
+      // obteniendo la información del usuario a editar
+      store.getOneUser(id);
 
       page.title = "Editar usuario";
       page.descripcion = "Edición de un usuario existente";
       page.isEditing = true;
-      page.action = () => store.updateUser(id);
-
       page.butonText = "Editar";
 
-      store.getOneUser(id);
+      page.action = () => store.updateUser(id);
       break;
   }
 });
