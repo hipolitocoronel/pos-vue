@@ -82,11 +82,13 @@
           </div>
 
           <TooltipProvider>
-            <Tooltip delayDuration="200">
+            <Tooltip :delayDuration="200">
               <TooltipTrigger>
-                <Button variant="secondary">
-                  <Plus class="w-4 h-4" size="icon" />
-                </Button>
+                <CategoryModal>
+                  <Button variant="secondary">
+                    <Plus class="w-4 h-4" size="icon" />
+                  </Button>
+                </CategoryModal>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Agregar una nueva categoría</p>
@@ -120,6 +122,15 @@
       <div
         class="relative w-64 h-64 overflow-hidden rounded-lg mt-14 bg-neutral-900"
       >
+        <Button
+          class="absolute rounded-full right-2 top-2 opacity-85 hover:opacity-100"
+          v-if="imagen"
+          size="icon"
+          variant="destructive"
+          @click="imagen = null"
+        >
+          <Trash class="w-5 h-5" />
+        </Button>
         <p
           class="absolute bottom-0 w-full mb-3 text-xs text-center text-muted-foreground"
           v-if="!imagen"
@@ -141,7 +152,7 @@ import { useProductStore } from "../store/product";
 import Input from "../components/ui/input/Input.vue";
 import Label from "../components/ui/label/Label.vue";
 import Button from "../components/ui/button/Button.vue";
-import { Loader2, Plus } from "lucide-vue-next";
+import { Loader2, Plus, Trash } from "lucide-vue-next";
 import {
   Select,
   SelectContent,
@@ -158,6 +169,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+import CategoryModal from "../components/products/CategoryModal.vue";
 
 const store = useProductStore();
 const route = useRoute();
