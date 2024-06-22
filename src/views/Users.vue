@@ -30,7 +30,7 @@
     title="¿Estás seguro?"
     :isOpen="alertDelete"
     description="Ésta acción no se puede deshacer."
-    @close-alert="
+    @closeAlert="
       () => {
         router.replace('/users');
         alertDelete = false;

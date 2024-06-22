@@ -1,6 +1,24 @@
 import { formatMoney } from "@/utils";
+import { h } from "vue";
+import TableAction from "../../components/products/TableAction.vue";
+const base_url = import.meta.env.VITE_BACKEND_URL;
 
 const columns = [
+  {
+    accessorKey: "image",
+    header: "",
+    cell: ({ row }) => {
+      const { id, collectionId, image } = row.original;
+
+      if (!image) return "-";
+
+      return h("img", {
+        src: `${base_url}/api/files/${collectionId}/${id}/${image}`,
+        alt: "Product Image",
+        style: "width: 50px; height: auto;",
+      });
+    },
+  },
   {
     accessorKey: "description",
     header: "Descripción",
@@ -15,13 +33,21 @@ const columns = [
     header: "Stock",
   },
   {
-    accessorKey: "category",
+    accessorKey: "expand.category.name",
     header: "Categoria",
-    cell: ({ row }) => "-",
+    cell: ({ row }) => {
+      const { expand } = row.original;
+
+      return expand?.category ? expand.category.name : "-";
+    },
   },
   {
     accessorKey: "actions",
-    header: "",
+    header: "Acciones",
+    cell: ({ row }) => {
+      const { id } = row.original;
+      return h("div", h(TableAction, { id, domain: "products" }));
+    },
   },
 ];
 

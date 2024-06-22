@@ -38,5 +38,5 @@ const { title, description, action, isOpen } = defineProps([
   "isOpen",
 ]);
 
-const emit = defineEmits(["close-alert"]);
+const emit = defineEmits(["closeAlert"]);
 </script>

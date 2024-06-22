@@ -1,5 +1,5 @@
 <template>
-  <HeaderPage to="/products" title="Productos" functionality="Crear producto" />
+  <HeaderPage to="/products" title="Productos" :functionality="page.title" />
 
   <div class="pt-4 pb-6 border-b">
     <h1 class="mb-1 text-2xl font-bold">{{ page.title }}</h1>
@@ -9,7 +9,7 @@
   <main v-auto-animate>
     <Loader2
       class="my-3 animate-spin"
-      v-if="store.loading && !store?.product?.id"
+      v-if="store.loading && !store?.product?.description"
     />
     <section v-else class="flex gap-10">
       <section class="grid gap-8 mt-8 grow max-w-7xl lg:grid-cols-2">
@@ -68,14 +68,20 @@
         <div class="flex items-end gap-2">
           <div class="grow">
             <Label class="mb-1">Categoría</Label>
-            <Select>
+            <Select v-model="store.product.category">
               <SelectTrigger>
                 <SelectValue placeholder="Seleccione una categoría" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Categorías</SelectLabel>
-                  <SelectItem value="apple"> Gaseosas </SelectItem>
+                  <SelectItem
+                    v-for="category in storeCategory.categories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category.name }}
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -98,8 +104,8 @@
         </div>
 
         <div class="relative">
-          <Label class="mb-1" for="imagen">Imagen</Label>
-          <Input id="imagen" type="file" @change="onFileChange" />
+          <Label class="mb-1" for="image">Imagen</Label>
+          <Input id="image" type="file" @change="onFileChange" />
           <p class="absolute text-xs text-muted-foreground -bottom-6">
             Resolución de imagen recomendada: 800 x 800 pixeles
           </p>
@@ -124,21 +130,21 @@
       >
         <Button
           class="absolute rounded-full right-2 top-2 opacity-85 hover:opacity-100"
-          v-if="imagen"
+          v-if="store.product.image"
           size="icon"
           variant="destructive"
-          @click="imagen = null"
+          @click="store.product.image = null"
         >
           <Trash class="w-5 h-5" />
         </Button>
         <p
           class="absolute bottom-0 w-full mb-3 text-xs text-center text-muted-foreground"
-          v-if="!imagen"
+          v-if="!store.imageSrc"
         >
           vista previa del producto
         </p>
 
-        <img :src="imagen" class="object-cover w-full h-full" v-else />
+        <img :src="store.imageSrc" class="object-cover w-full h-full" v-else />
       </div>
     </section>
   </main>
@@ -147,8 +153,9 @@
 <script setup>
 import HeaderPage from "../components/layout/HeaderPage.vue";
 import { useRoute, useRouter } from "vue-router";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive } from "vue";
 import { useProductStore } from "../store/product";
+import { useCategoryStore } from "../store/category.store";
 import Input from "../components/ui/input/Input.vue";
 import Label from "../components/ui/label/Label.vue";
 import Button from "../components/ui/button/Button.vue";
@@ -173,10 +180,9 @@ import {
 import CategoryModal from "../components/products/CategoryModal.vue";
 
 const store = useProductStore();
+const storeCategory = useCategoryStore();
 const route = useRoute();
 const router = useRouter();
-
-const imagen = ref(null);
 
 const page = reactive({
   title: "",
@@ -193,27 +199,27 @@ onMounted(() => {
       page.title = "Crear producto";
       page.descripcion = "Creación un nuevo producto";
       page.isCreating = true;
-      page.action = store.createUser;
+      page.action = store.createProduct;
 
       page.butonText = "Crear";
       break;
-    case "users.update":
+    case "products.update":
       const id = route.params.id;
       // obteniendo la información del usuario a editar
-      store.getOneUser(id);
+      store.getOneProduct(id);
 
-      page.title = "Editar usuario";
-      page.descripcion = "Edición de un usuario existente";
+      page.title = "Editar producto";
+      page.descripcion = "Edición de un producto existente";
       page.isEditing = true;
       page.butonText = "Editar";
 
-      page.action = () => store.updateUser(id);
+      page.action = () => store.updateProduct(id);
       break;
   }
 });
 
 const onFileChange = (e) => {
   const file = e.target.files[0];
-  imagen.value = URL.createObjectURL(file);
+  store.product.image = file;
 };
 </script>

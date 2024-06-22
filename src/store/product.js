@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { pb } from "../services/apiPocketbase";
 import { toast } from "vue-sonner";
@@ -20,6 +20,8 @@ export const useProductStore = defineStore("products", () => {
     minStock: 123,
     purchasePrice: 123,
     salePrice: 123,
+    category: "",
+    image: null,
   });
 
   const pagination = ref({
@@ -37,6 +39,7 @@ export const useProductStore = defineStore("products", () => {
 
       const result = await api.getList(page, perPage, {
         sort: "-created",
+        expand: "category",
       });
 
       products.value = result?.items;
@@ -93,7 +96,7 @@ export const useProductStore = defineStore("products", () => {
     try {
       loading.value = true;
       await api.delete(id);
-      toast.success("Producto elimin1ado con éxito");
+      toast.success("Producto eliminado con éxito");
       loading.value = false;
 
       // redirección vista productos
@@ -109,6 +112,18 @@ export const useProductStore = defineStore("products", () => {
   const resetPagination = () =>
     (pagination.value = { page: 0, perPage: 50, totalItems: 0, totalPages: 0 });
 
+  const imageSrc = computed(() => {
+    const image = product.value.image;
+
+    if (!image) return null;
+
+    // si el image es de tipo File, retorno url de acceso
+    if (typeof image == "object") return URL.createObjectURL(image);
+
+    // caso en que el img es un string, en es caso se obtiene desde api
+    return `${pb.baseUrl}/api/files/products/${product.value.id}/${image}`;
+  });
+
   return {
     // properties
     loading,
@@ -116,6 +131,9 @@ export const useProductStore = defineStore("products", () => {
     product,
     products,
     pagination,
+
+    //computed
+    imageSrc,
 
     // methods
     getProducts,

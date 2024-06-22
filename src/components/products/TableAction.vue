@@ -30,6 +30,8 @@
 </template>
 
 <script setup>
+const { id, domain } = defineProps(["id", "domain"]);
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,15 +41,5 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Button } from "@/components/ui/button";
-// import AlertDialog from "@/components/layout/AlertDialog.vue";
 import { MoreHorizontal, Trash, PenLine, Eye } from "lucide-vue-next";
-
-import { ref } from "vue";
-// const dialog = ref(false);
-
-const { id, domain, actionDelete } = defineProps([
-  "id",
-  "domain",
-  "actionDelete",
-]);
 </script>

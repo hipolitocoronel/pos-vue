@@ -40,13 +40,13 @@
     title="¿Estás seguro?"
     :isOpen="alertDelete"
     description="Ésta acción no se puede deshacer."
-    @close-alert="
+    @closeAlert="
       () => {
-        router.replace('/users');
+        router.replace('/products');
         alertDelete = false;
       }
     "
-    :action="() => store.deleteUser(route.params.id)"
+    :action="() => store.deleteProduct(route.params.id)"
   />
 </template>
 
@@ -71,7 +71,7 @@ onMounted(() => store.getProducts());
 watch(route, () => {
   alertDelete.value = false;
   const id = route?.params.id || "";
-  if (route.name === "users.delete" && id.length > 4) {
+  if (route.name === "products.delete" && id.length > 4) {
     alertDelete.value = true;
   }
 });
