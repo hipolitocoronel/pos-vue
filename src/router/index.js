@@ -36,6 +36,11 @@ const routes = [
     children: [
       { path: "", name: "products.index", component: Products },
       {
+        path: "show/:id",
+        name: "products.show",
+        component: OneProduct,
+      },
+      {
         path: "create",
         name: "products.create",
         component: OneProduct,

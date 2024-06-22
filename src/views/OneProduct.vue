@@ -20,6 +20,7 @@
             type="text"
             placeholder="Ingrese nombre o descripción del producto."
             v-model="store.product.description"
+            :disabled="page.showOnly"
           />
         </div>
 
@@ -31,6 +32,7 @@
               type="number"
               placeholder="Ingrese su nombre completo"
               v-model="store.product.stock"
+              :disabled="page.showOnly"
             />
           </div>
           <div class="grid w-full items-center gap-1.5">
@@ -40,6 +42,7 @@
               type="number"
               placeholder="Ingrese su nombre completo"
               v-model="store.product.minStock"
+              :disabled="page.showOnly"
             />
           </div>
         </div>
@@ -52,6 +55,7 @@
               type="number"
               placeholder="Ingrese su nombre completo"
               v-model="store.product.purchasePrice"
+              :disabled="page.showOnly"
             />
           </div>
           <div class="grid w-full items-center gap-1.5">
@@ -61,6 +65,7 @@
               type="number"
               placeholder="Ingrese su nombre completo"
               v-model="store.product.salePrice"
+              :disabled="page.showOnly"
             />
           </div>
         </div>
@@ -68,9 +73,15 @@
         <div class="flex items-end gap-2">
           <div class="grow">
             <Label class="mb-1">Categoría</Label>
-            <Select v-model="store.product.category">
+            <Select v-model="store.product.category" :disabled="page.showOnly">
               <SelectTrigger>
-                <SelectValue placeholder="Seleccione una categoría" />
+                <SelectValue
+                  :placeholder="
+                    page.showOnly
+                      ? 'Producto sin categoría'
+                      : 'Seleccione una categoría'
+                  "
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -87,7 +98,7 @@
             </Select>
           </div>
 
-          <TooltipProvider>
+          <TooltipProvider v-if="!page.showOnly">
             <Tooltip :delayDuration="200">
               <TooltipTrigger>
                 <CategoryModal>
@@ -103,7 +114,7 @@
           </TooltipProvider>
         </div>
 
-        <div class="relative">
+        <div class="relative" v-if="!page.showOnly">
           <Label class="mb-1" for="image">Imagen</Label>
           <Input id="image" type="file" @change="onFileChange" />
           <p class="absolute text-xs text-muted-foreground -bottom-6">
@@ -130,7 +141,7 @@
       >
         <Button
           class="absolute rounded-full right-2 top-2 opacity-85 hover:opacity-100"
-          v-if="store.product.image"
+          v-if="store.product.image && !page.showOnly"
           size="icon"
           variant="destructive"
           @click="store.product.image = null"
@@ -190,11 +201,22 @@ const page = reactive({
   action: () => {},
   isEditing: false,
   isCreating: false,
+  showOnly: false,
   butonText: "",
 });
 
 onMounted(() => {
+  const id = route.params.id;
+
   switch (route.name) {
+    case "products.show":
+      // obteniendo la información del usuario
+      store.getOneProduct(id);
+
+      page.title = "Ver producto";
+      page.descripcion = "Información completa del producto";
+      page.showOnly = true;
+      break;
     case "products.create":
       page.title = "Crear producto";
       page.descripcion = "Creación un nuevo producto";
@@ -204,7 +226,6 @@ onMounted(() => {
       page.butonText = "Crear";
       break;
     case "products.update":
-      const id = route.params.id;
       // obteniendo la información del usuario a editar
       store.getOneProduct(id);
 
