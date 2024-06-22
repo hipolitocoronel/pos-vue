@@ -2,9 +2,9 @@
   <h1 class="text-2xl font-bold">
     Productos
 
-    <span class="text-base font-light"
-      >({{ store.products?.length || 0 }})</span
-    >
+    <span class="text-base font-light">
+      ({{ filteredProducts?.length || 0 }})
+    </span>
   </h1>
 
   <p class="text-sm text-muted-foreground">
@@ -17,6 +17,7 @@
         placeholder="Buscar por descripción"
         variant="secondary"
         class="max-w-md"
+        v-model="searchQuery"
       />
       <Button variant="secondary">Categoria</Button>
     </div>
@@ -30,7 +31,7 @@
 
   <DataTable
     :columns="store.columns"
-    :data="store.products"
+    :data="filteredProducts"
     :loading="store.loading"
     :pagination="store.pagination"
     :action="store.getProducts"
@@ -51,13 +52,7 @@
 </template>
 
 <script setup>
-import { Loader2, Plus } from "lucide-vue-next";
-import Button from "../components/ui/button/Button.vue";
-import DataTable from "@/components/layout/DataTable.vue";
-import AlertDialog from "../components/layout/AlertDialog.vue";
-import { Input } from "../components/ui/input";
-
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useProductStore } from "../store/product";
 
@@ -65,6 +60,7 @@ const route = useRoute();
 const router = useRouter();
 const store = useProductStore();
 const alertDelete = ref(false);
+const searchQuery = ref("");
 
 onMounted(() => store.getProducts());
 
@@ -75,4 +71,18 @@ watch(route, () => {
     alertDelete.value = true;
   }
 });
+
+const filteredProducts = computed(() => {
+  const query = searchQuery.value.toLowerCase();
+  return store.products.filter((product) =>
+    product.description.toLowerCase().includes(query)
+  );
+});
+
+// ui importatios
+import { Loader2, Plus } from "lucide-vue-next";
+import Button from "../components/ui/button/Button.vue";
+import DataTable from "@/components/layout/DataTable.vue";
+import AlertDialog from "../components/layout/AlertDialog.vue";
+import { Input } from "../components/ui/input";
 </script>
