@@ -4,21 +4,22 @@ import TableAction from "../../components/products/TableAction.vue";
 const base_url = import.meta.env.VITE_BACKEND_URL;
 
 const columns = [
-  {
-    accessorKey: "image",
-    header: "",
-    cell: ({ row }) => {
-      const { id, collectionId, image } = row.original;
+  // {
+  //   accessorKey: "image",
+  //   header: "",
+  //   cell: ({ row }) => {
+  //     const { id, collectionId, image } = row.original;
 
-      if (!image) return "-";
+  //     if (!image) return "-";
 
-      return h("img", {
-        src: `${base_url}/api/files/${collectionId}/${id}/${image}`,
-        alt: "Product Image",
-        style: "width: 50px; height: auto;",
-      });
-    },
-  },
+  //     return h("img", {
+  //       src: `${base_url}/api/files/${collectionId}/${id}/${image}`,
+  //       alt: "Product Image",
+  //       style: "width: 50px; height: auto;",
+  //     });
+  //   },
+  // },
+  { accessorKey: "code", header: "Código" },
   {
     accessorKey: "description",
     header: "Descripción",
@@ -28,10 +29,10 @@ const columns = [
     header: "Precio de venta",
     cell: ({ row }) => formatMoney(row.getValue("salePrice")),
   },
-  {
-    accessorKey: "stock",
-    header: "Stock",
-  },
+  // {
+  //   accessorKey: "stock",
+  //   header: "Stock",
+  // },
   {
     accessorKey: "expand.category.name",
     header: "Categoria",

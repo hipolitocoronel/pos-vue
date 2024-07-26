@@ -14,7 +14,7 @@
   <div class="flex justify-between mt-6">
     <div class="flex gap-3 grow">
       <Input
-        placeholder="Buscar por descripción"
+        placeholder="Buscar por código o descripción"
         variant="secondary"
         class="max-w-md"
         v-model="searchQuery"

@@ -1,8 +1,26 @@
 <template>
   <div class="flex h-screen">
     <div class="flex items-center justify-center grow">
-      <form class="ma-5 w-[430px]" @submit.prevent="store.login()">
-        <p class="mb-3 text-3xl font-bold">Bienvenidos</p>
+      <form class="ma-5 w-[450px]" @submit.prevent="store.login()">
+        <p class="mb-3 text-3xl font-bold">Bienvenido</p>
+
+        <Button
+          type="button"
+          class="w-full mb-3"
+          variant="secondary"
+          @click="store.loginWithGoogle()"
+        >
+          <img
+            src="@/assets/google-icon.webp"
+            alt="logo de google"
+            width="20"
+            class="mx-2"
+          />
+          Ingresar con google
+        </Button>
+
+        <Separator label="O Ingresando" class="my-5" />
+
         <div v-auto-animate>
           <Label>Correo electrónico</Label>
           <Input
@@ -57,6 +75,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "../components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 import { useStore } from "../store/store";
 import { Eye, EyeOff, Loader2 } from "lucide-vue-next";

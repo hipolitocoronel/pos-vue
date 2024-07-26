@@ -6,7 +6,7 @@
       <p class="font-bold text-md">Coronel Sistemas</p>
     </div>
 
-    <p class="text-sm font-bold text-muted">13 de may 15:48 hs</p>
+    <p class="text-sm font-bold text-muted-foreground">13 de may 15:48 hs</p>
     <Button variant="secondary" size="icon">
       <Bell class="w-4" />
     </Button>

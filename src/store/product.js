@@ -4,6 +4,10 @@ import { pb } from "../services/apiPocketbase";
 import { toast } from "vue-sonner";
 import columns from "../utils/columns/products";
 import { useRouter } from "vue-router";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
+import { useField } from "vee-validate";
+import productValidator from "../utils/form-validations/product.validator";
 
 export const useProductStore = defineStore("products", () => {
   const router = useRouter();
@@ -13,17 +17,6 @@ export const useProductStore = defineStore("products", () => {
   const loading = ref(false);
   const products = ref([]);
 
-  // para creacion/ edicion
-  const product = ref({
-    description: "test",
-    stock: 123,
-    minStock: 123,
-    purchasePrice: 123,
-    salePrice: 123,
-    category: "",
-    image: null,
-  });
-
   const pagination = ref({
     page: 1,
     perPage: 50,
@@ -31,7 +24,31 @@ export const useProductStore = defineStore("products", () => {
     totalPages: 0,
   });
 
-  const getProducts = async () => {
+  const { handleSubmit, errors } = useForm({
+    validationSchema: toTypedSchema(productValidator),
+    initialValues: { stock: null, minStock: null },
+  });
+
+  const fields = [
+    "description",
+    "code",
+    "stock",
+    "minStock",
+    "purchasePrice",
+    "salePrice",
+    "category",
+    "image",
+  ];
+
+  const fieldData = fields.reduce((acc, fieldName) => {
+    const { value } = useField(fieldName);
+    acc[fieldName] = value;
+    return acc;
+  }, {});
+
+  const product = ref(fieldData);
+
+  const getProducts = async (query) => {
     try {
       loading.value = true;
 
@@ -39,6 +56,7 @@ export const useProductStore = defineStore("products", () => {
 
       const result = await api.getList(page, perPage, {
         sort: "-created",
+        filter: `description~"${query}" || code~"${query}"`,
         expand: "category",
       });
 
@@ -64,19 +82,21 @@ export const useProductStore = defineStore("products", () => {
     }
   };
 
-  const createProduct = async () => {
-    try {
-      loading.value = true;
-      await api.create(product.value);
-      setTimeout(() => {
+  const createProduct = handleSubmit(async () => {
+    if (Object.keys(errors.value).length === 0) {
+      try {
+        loading.value = true;
+        await api.create(product.value);
+        setTimeout(() => {
+          loading.value = false;
+          toast.success("Producto creado con éxito");
+        }, 500);
+      } catch (error) {
+        toast.error("Error al crear producto, inténtelo más tarde!");
         loading.value = false;
-        toast.success("Producto creado con éxito");
-      }, 500);
-    } catch (error) {
-      toast.error("Error al crear producto, inténtelo más tarde!");
-      loading.value = false;
+      }
     }
-  };
+  });
 
   const updateProduct = async (id) => {
     try {
@@ -131,6 +151,7 @@ export const useProductStore = defineStore("products", () => {
     product,
     products,
     pagination,
+    errors,
 
     //computed
     imageSrc,

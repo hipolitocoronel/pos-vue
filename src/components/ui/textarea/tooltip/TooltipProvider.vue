@@ -6,8 +6,6 @@ const props = defineProps({
   skipDelayDuration: { type: Number, required: false },
   disableHoverableContent: { type: Boolean, required: false },
   disableClosingTrigger: { type: Boolean, required: false },
-  disabled: { type: Boolean, required: false },
-  ignoreNonKeyboardFocus: { type: Boolean, required: false },
 });
 </script>
 

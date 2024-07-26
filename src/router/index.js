@@ -7,6 +7,7 @@ import OneUser from "../views/OneUser.vue";
 import OneProduct from "../views/OneProduct.vue";
 import Inventory from "../views/Inventory.vue";
 import Login from "../views/Login.vue";
+import FormInventory from "@/components/inventory/FormInventory.vue";
 import { pb } from "../services/apiPocketbase";
 import { toast } from "vue-sonner";
 
@@ -28,8 +29,14 @@ const routes = [
   },
   {
     path: "/inventory",
-    name: "inventory",
-    component: Inventory,
+    children: [
+      { path: "", name: "inventory.index", component: Inventory },
+      {
+        path: "create",
+        name: "invetory.create",
+        component: FormInventory,
+      },
+    ],
   },
   {
     path: "/products",

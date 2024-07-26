@@ -12,14 +12,29 @@ export const useStore = defineStore("store", () => {
 
   const loading = ref(false);
 
-  const validationSchema = toTypedSchema(loginValidation);
-
-  const { handleSubmit, errors } = useForm({ validationSchema });
+  const { handleSubmit, errors } = useForm({
+    validationSchema: toTypedSchema(loginValidation),
+  });
 
   const { value: email } = useField("email");
   const { value: password } = useField("password");
 
-  email.value = "hipolitocoronel1522@gmail.com";
+  // email.value = "hipolitocoronel1522@gmail.com";
+
+  const loginWithGoogle = async () => {
+    try {
+      loading.value = true;
+      await pb.collection("users").authWithOAuth2({ provider: "google" });
+
+      loading.value = false;
+      router.push("/sales");
+      toast.success("Inicio de sesión exitoso!");
+    } catch (error) {
+      loading.value = false;
+
+      toast.error("Error al iniciar sesión, intentelo más tarde");
+    }
+  };
 
   const login = handleSubmit(async () => {
     if (Object.keys(errors.value).length === 0) {
@@ -54,5 +69,6 @@ export const useStore = defineStore("store", () => {
 
     // methods
     login,
+    loginWithGoogle,
   };
 });
